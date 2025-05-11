@@ -1,8 +1,12 @@
-import { Button } from '@/components/ui/button';
-import { ArrowRight, CreditCard, Database } from 'lucide-react';
-import { Terminal } from './terminal';
+import { Button } from "@/components/ui/button";
+import { ArrowRight, CreditCard, Database } from "lucide-react";
+import { Terminal } from "./terminal";
+import Link from "next/link";
+import { getPublicListings } from "@/lib/db/queries";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const listings = await getPublicListings();
+
   return (
     <main>
       <section className="py-20">
@@ -10,7 +14,7 @@ export default function HomePage() {
           <div className="lg:grid lg:grid-cols-12 lg:gap-8">
             <div className="sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left">
               <h1 className="text-4xl font-bold text-gray-900 tracking-tight sm:text-5xl md:text-6xl">
-                Compra y vende 
+                Compra y vende
                 <span className="block text-orange-500">en solo minutos</span>
               </h1>
               <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
@@ -38,6 +42,33 @@ export default function HomePage() {
               <Terminal />
             </div>
           </div>
+        </div>
+      </section>
+
+      
+      <section className="p-6">
+        <h1 className="text-2xl font-bold mb-6">Productos en venta</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {listings.map((item) => (
+            <Link
+              href={`/listing/${item.id}`}
+              key={item.id}
+              className="border p-4 rounded shadow hover:bg-gray-50"
+            >
+              <h2 className="text-xl font-semibold">{item.title}</h2>
+              <p className="text-gray-600">€{item.price}</p>
+              {item.imageUrl && (
+                <img
+                  src={item.imageUrl}
+                  alt={item.title}
+                  className="mt-2 w-full h-40 object-cover rounded"
+                />
+              )}
+              <p className="text-sm text-gray-400 mt-1">
+                Publicado por {item.sellerName || "usuario"}
+              </p>
+            </Link>
+          ))}
         </div>
       </section>
 
