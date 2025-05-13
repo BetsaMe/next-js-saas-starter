@@ -32,7 +32,7 @@ export default async function HomePage() {
                     variant="outline"
                     className="text-lg rounded-full"
                   >
-                    Deploy your own
+                    Comienza a vender
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </a>
@@ -45,30 +45,31 @@ export default async function HomePage() {
         </div>
       </section>
 
-      
-      <section className="p-6">
-        <h1 className="text-2xl font-bold mb-6">Productos en venta</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {listings.map((item) => (
-            <Link
-              href={`/listing/${item.id}`}
-              key={item.id}
-              className="border p-4 rounded shadow hover:bg-gray-50"
-            >
-              <h2 className="text-xl font-semibold">{item.title}</h2>
-              <p className="text-gray-600">€{item.price}</p>
-              {item.imageUrl && (
-                <img
-                  src={item.imageUrl}
-                  alt={item.title}
-                  className="mt-2 w-full h-40 object-cover rounded"
-                />
-              )}
-              <p className="text-sm text-gray-400 mt-1">
-                Publicado por {item.sellerName || "usuario"}
-              </p>
-            </Link>
-          ))}
+      <section className="py-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h1 className="text-2xl font-bold mb-6">Productos en venta</h1>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {listings.map((item) => (
+              <Link
+                href={`/listing/${item.id}`}
+                key={item.id}
+                className="border p-4 rounded shadow hover:bg-gray-50"
+              >
+                <h2 className="text-xl font-semibold">{item.title}</h2>
+                <p className="text-gray-600">€{item.price}</p>
+                {item.imageUrl && (
+                  <img
+                    src={item.imageUrl}
+                    alt={item.title}
+                    className="mt-2 w-full h-40 object-cover rounded"
+                  />
+                )}
+                <p className="text-sm text-gray-400 mt-1">
+                  Publicado por {item.sellerName || "usuario"}
+                </p>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 

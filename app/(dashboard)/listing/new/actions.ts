@@ -9,7 +9,7 @@ export async function createListing(formData: FormData) {
   const user = await getUser();
   if (!user) return { error: 'Debes iniciar sesión.' };
 
-  if (user.subscriptionStatus !== 'active') {
+  if (user.planName === 'null') {
     return { error: 'Necesitas una suscripción activa para publicar.' };
   }
 

@@ -45,10 +45,13 @@ export const signIn = validatedAction(signInSchema, async (data, formData) => {
 
   await setSession(user);
 
-  const redirectTo = formData.get('redirect') as string | null;
-  if (redirectTo === 'checkout') {
-    return { redirectUrl: '/checkout' };
-  }
+const redirectTo = formData.get('redirect') as string | null;
+
+if (redirectTo === 'checkout') {
+  return { redirectUrl: '/pricing' };
+}
+
+
 
   redirect('/dashboard');
 });
@@ -95,10 +98,12 @@ export const signUp = validatedAction(signUpSchema, async (data, formData) => {
 
   await setSession(createdUser);
 
-  const redirectTo = formData.get('redirect') as string | null;
-  if (redirectTo === 'checkout') {
-    return { redirectUrl: '/checkout' };
-  }
+const redirectTo = formData.get('redirect') as string | null;
+
+if (redirectTo === 'checkout') {
+  return { redirectUrl: '/pricing' };
+}
+
 
   redirect('/dashboard');
 });

@@ -36,18 +36,35 @@ export async function getUser() {
   return user[0];
 }
 
-export async function updateUserSubscriptionByCustomerId(customerId: string, data: Partial<typeof users.$inferInsert>) {
-  await db
+
+
+
+export async function updateUserSubscriptionByCustomerId(
+  customerId: string,
+  data: Partial<typeof users.$inferInsert>
+) {
+  console.log('🔁 Intentando actualizar usuario con:', {
+    stripeCustomerId: customerId,
+    planName: data.planName,
+    subscriptionStatus: data.subscriptionStatus,
+  });
+
+  // ... luego haces el update
+  const result = await db
     .update(users)
     .set({
       stripeSubscriptionId: data.stripeSubscriptionId,
       stripeProductId: data.stripeProductId,
       planName: data.planName,
       subscriptionStatus: data.subscriptionStatus,
-      updatedAt: new Date()
+      updatedAt: new Date(),
     })
-    .where(eq(users.stripeCustomerId, customerId));
+    .where(eq(users.stripeCustomerId, customerId))
+    .returning();
+
+  console.log('✅ Resultado del update:', result);
 }
+
 
 
 export async function getActivityLogs() {

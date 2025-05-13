@@ -30,7 +30,7 @@ function SubscriptionSkeleton() {
   return (
     <Card className="mb-8 h-[140px]">
       <CardHeader>
-        <CardTitle>Team Subscription</CardTitle>
+        <CardTitle>Mi suscripción</CardTitle>
       </CardHeader>
     </Card>
   );
@@ -42,14 +42,14 @@ function ManageSubscription() {
   return (
     <Card className="mb-8">
       <CardHeader>
-        <CardTitle>Mi Suscripción</CardTitle>
+        <CardTitle>Tu Suscripción</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
             <div className="mb-4 sm:mb-0">
               <p className="font-medium">
-                Plan actual: {user?.planName || 'Gratis'}
+                Plan actual: {user?.planName || 'Sin suscripción activa'}
               </p>
               <p className="text-sm text-muted-foreground">
                 {user?.subscriptionStatus === 'active'
@@ -74,7 +74,7 @@ function ManageSubscription() {
 export default function AccountPage() {
   return (
     <section className="flex-1 p-4 lg:p-8">
-      <h1 className="text-lg lg:text-2xl font-medium mb-6">Mi cuenta</h1>
+      <h1 className="text-lg lg:text-2xl font-medium mb-6">Tu cuenta</h1>
       <Suspense fallback={<SubscriptionSkeleton />}>
         <ManageSubscription />
       </Suspense>
