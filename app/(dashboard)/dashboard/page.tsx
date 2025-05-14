@@ -1,43 +1,81 @@
-'use client';
-
-import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardFooter
-} from '@/components/ui/card';
-import { customerPortalAction } from '@/lib/payments/actions';
-// import { useActionState } from 'react';
-import { User } from '@/lib/db/schema';
-import useSWR from 'swr';
-import { Suspense } from 'react';
-// import { Input } from '@/components/ui/input';
-// import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-// import { Label } from '@/components/ui/label';
-// import { Loader2, PlusCircle } from 'lucide-react';
-
-// type ActionState = {
-//   error?: string;
-//   success?: string;
-// };
+"use client";
+import { Listing } from "@/lib/db/schema";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { customerPortalAction } from "@/lib/payments/actions";
+import { User } from "@/lib/db/schema";
+import useSWR  from "swr";
+import { Suspense } from "react";
+import Link from "next/link";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
+function UserArticles() {
+  type ListingWithSeller = {
+    id: number;
+    createdAt: string; // o Date, según lo que te devuelva
+    userId: number;
+    title: string;
+    description: string;
+    price: number;
+    imageUrl: string | null;
+    sellerName: string;
+  };
+
+  const { data: articles, error } = useSWR<ListingWithSeller[]>(
+    "/api/user/listings",
+    fetcher
+  );
+
+
+
+  if (error) return <div>Error al cargar artículos.</div>;
+  if (!articles) return <div>Cargando tus artículos…</div>;
+  if (articles.length === 0)
+    return <div>No has publicado ningún artículo.</div>;
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {articles.map((item) => (
+        <Link
+          href={`/listing/${item.id}`}
+          key={item.id}
+          className="border p-4 rounded shadow hover:bg-gray-50"
+        >
+          <h2 className="text-xl font-semibold">{item.title}</h2>
+          <p className="text-gray-600">€{item.price}</p>
+          {item.imageUrl && (
+            <img
+              src={item.imageUrl}
+              alt={item.title}
+              className="mt-2 w-full h-40 object-cover rounded"
+            />
+          )}
+          <p className="text-sm text-gray-400 mt-1">
+            Publicado por {item.sellerName || "usuario"}
+          </p>
+          <div className="flex justify-end my-2.5">
+
+          </div>
+        </Link>
+      ))}
+    </div>
+  );
+}
+
+//Tarjeta de suscripcion de usuario
 function SubscriptionSkeleton() {
   return (
     <Card className="mb-8 h-[140px]">
       <CardHeader>
-        <CardTitle>Mi suscripción</CardTitle>
+        <CardTitle>Tu suscripción</CardTitle>
       </CardHeader>
     </Card>
   );
 }
 
 function ManageSubscription() {
-  const { data: user } = useSWR<User>('/api/user', fetcher);
+  const { data: user } = useSWR<User>("/api/user", fetcher);
 
   return (
     <Card className="mb-8">
@@ -49,14 +87,14 @@ function ManageSubscription() {
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
             <div className="mb-4 sm:mb-0">
               <p className="font-medium">
-                Plan actual: {user?.planName || 'Sin suscripción activa'}
+                Plan actual: {user?.planName || "Sin suscripción activa"}
               </p>
               <p className="text-sm text-muted-foreground">
-                {user?.subscriptionStatus === 'active'
-                  ? 'Facturado mensualmente'
-                  : user?.subscriptionStatus === 'trialing'
-                  ? 'Período de prueba'
-                  : 'Sin suscripción activa'}
+                {user?.subscriptionStatus === "active"
+                  ? "Facturado mensualmente"
+                  : user?.subscriptionStatus === "trialing"
+                  ? "Período de prueba"
+                  : "No tienes ningun plan activo"}
               </p>
             </div>
             <form action={customerPortalAction}>
@@ -71,6 +109,7 @@ function ManageSubscription() {
   );
 }
 
+//Pagina completa
 export default function AccountPage() {
   return (
     <section className="flex-1 p-4 lg:p-8">
@@ -78,6 +117,8 @@ export default function AccountPage() {
       <Suspense fallback={<SubscriptionSkeleton />}>
         <ManageSubscription />
       </Suspense>
+      <h2 className="text-lg font-medium mb-6"> Articulos Publicados </h2>
+      <UserArticles />
     </section>
   );
 }

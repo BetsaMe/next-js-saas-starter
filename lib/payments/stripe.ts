@@ -154,8 +154,6 @@ export async function handleSubscriptionChange(
 }
 
 
-
-
 export async function getStripePrices() {
   const prices = await stripe.prices.list({
     expand: ['data.product'],

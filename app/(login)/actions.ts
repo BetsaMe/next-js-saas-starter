@@ -48,21 +48,22 @@ export const signIn = validatedAction(signInSchema, async (data, formData) => {
 const redirectTo = formData.get('redirect') as string | null;
 
 if (redirectTo === 'checkout') {
-  return { redirectUrl: '/pricing' };
+  return { redirectUrl: '/dashboard' };
 }
-
-
 
   redirect('/dashboard');
 });
 
+
 const signUpSchema = z.object({
+  name: z.string().min(1, 'Name is required').max(100),
   email: z.string().email(),
   password: z.string().min(8)
 });
 
+
 export const signUp = validatedAction(signUpSchema, async (data, formData) => {
-  const { email, password } = data;
+  const { name, email, password } = data;
 
   const existingUser = await db
     .select()
@@ -81,6 +82,7 @@ export const signUp = validatedAction(signUpSchema, async (data, formData) => {
   const passwordHash = await hashPassword(password);
 
   const newUser: NewUser = {
+    name,
     email,
     passwordHash,
     role: 'user'
@@ -103,7 +105,6 @@ const redirectTo = formData.get('redirect') as string | null;
 if (redirectTo === 'checkout') {
   return { redirectUrl: '/pricing' };
 }
-
 
   redirect('/dashboard');
 });
