@@ -4,7 +4,7 @@ import { notFound, redirect } from 'next/navigation';
 import { DeleteListingButton } from "@/components/DeleteListingButton"; // ← nuevo
 
 interface ProductPageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
