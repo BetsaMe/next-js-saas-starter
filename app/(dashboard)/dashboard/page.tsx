@@ -1,5 +1,5 @@
 "use client";
-import { Listing } from "@/lib/db/schema";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { customerPortalAction } from "@/lib/payments/actions";
@@ -38,9 +38,9 @@ function UserArticles() {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {articles.map((item) => (
         <Link
-          href={`/listing/${item.id}`}
+          href={`/listings/${item.id}`}
           key={item.id}
-          className="border p-4 rounded shadow hover:bg-gray-50"
+          className="border p-4 rounded-xl shadow-md hover:bg-gray-50"
         >
           <h2 className="text-xl font-semibold">{item.title}</h2>
           <p className="text-gray-600">€{item.price}</p>

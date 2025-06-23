@@ -22,13 +22,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
   ]);
 
   if (!listing) notFound();
-  if (!session?.user) {
-    // redirige o muestra sin el botón
-    redirect('/sign-in');
-  }
+ 
 
-  const isOwner = listing.userId === session.user.id;
+  // 3) Determinar si el usuario autenticado es el propietario
+  const user = session?.user
+  const isOwner = user ? listing.userId === user.id : false
 
+  
   return (
     <section className="flex flex-col items-start mx-auto w-[70vw] max-w-6xl p-4 lg:p-8 gap-8">
       {/* Imagen */}

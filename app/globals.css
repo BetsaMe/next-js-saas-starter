@@ -4,10 +4,11 @@
 */
 @custom-variant dark (&:is(.dark *));
 
-@plugin 'tailwindcss-animate';
+@plugin 'tailwindcss-animate'; 
 
 @variant dark (&:is(.dark *));
 
+/* 3. Theme Mapping (HSL based) */
 @theme {
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
@@ -42,6 +43,7 @@
   --color-chart-3: hsl(var(--chart-3));
   --color-chart-4: hsl(var(--chart-4));
   --color-chart-5: hsl(var(--chart-5));
+   --color-chart-6: hsl(var(--chart-6));
 
   --color-sidebar: hsl(var(--sidebar-background));
   --color-sidebar-foreground: hsl(var(--sidebar-foreground));
@@ -55,6 +57,7 @@
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
+
 }
 
 /*
@@ -79,8 +82,17 @@
   body {
     font-family: 'Manrope', Arial, Helvetica, sans-serif;
   }
+  .shadow-01 {
+    /* usa la variable que ya defines en :root */
+    box-shadow: var(--shadow-01);
+  }
+  @layer components{
+    .air-card{
+      @apply border-none p-4 rounded-xl shadow-md hover:bg-gray-50
+    }
+  }
 }
-
+/* 5. Variables del tema (componentes HSL numéricos) */
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -89,8 +101,8 @@
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 217, 90%, 50%, 1;
+    --primary-foreground: 210 40% 98%; 
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
     --muted: 210 40% 96.1%;
@@ -107,6 +119,7 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    --chart-6: 200, 100%, 30%, 1;
     --radius: 0.5rem;
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -116,6 +129,7 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    --shadow-01:0 4px 14px 0 rgba(0,0,0,0.15);
   }
 
   .dark {
@@ -164,7 +178,7 @@
 }
 
 /*
-  ---break---
+  ---break---Aqui cambio los estilos
 */
 
 :root {
@@ -174,7 +188,7 @@
   --card-foreground: hsl(240 10% 3.9%);
   --popover: hsl(0 0% 100%);
   --popover-foreground: hsl(240 10% 3.9%);
-  --primary: hsl(240 5.9% 10%);
+  --primary: hsl(217, 90%, 50%, 1); 
   --primary-foreground: hsl(0 0% 98%);
   --secondary: hsl(240 4.8% 95.9%);
   --secondary-foreground: hsl(240 5.9% 10%);
@@ -192,6 +206,7 @@
   --chart-3: hsl(197 37% 24%);
   --chart-4: hsl(43 74% 66%);
   --chart-5: hsl(27 87% 67%);
+  --chart-6: hsla(200, 100%, 30%, 1);
   --radius: 0.6rem;
 }
 
@@ -229,7 +244,7 @@
 /*
   ---break---
 */
-
+/* 4. Theme Mapping (Inline) */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -255,6 +270,7 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+  --color-chart-6: var(--chart-6);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);

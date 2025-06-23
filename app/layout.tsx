@@ -1,19 +1,23 @@
 import './globals.css';
 import type { Metadata, Viewport } from 'next';
-import { Manrope } from 'next/font/google';
+import { Open_Sans } from 'next/font/google'
 import { getUser } from '@/lib/db/queries';
 import { SWRConfig } from 'swr';
 
 export const metadata: Metadata = {
-  title: 'Next.js SaaS Starter',
-  description: 'Get started quickly with Next.js, Postgres, and Stripe.'
+  title: 'Airbhub market',
+  description: 'Marketplace de suministros para la aviacion'
 };
 
 export const viewport: Viewport = {
   maximumScale: 1
 };
 
-const manrope = Manrope({ subsets: ['latin'] });
+const openSans = Open_Sans({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  variable: '--font-open-sans',   // opcional, para usarlo como CSS variable
+})
 
 export default function RootLayout({
   children
@@ -23,7 +27,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`bg-white dark:bg-gray-950 text-black dark:text-white ${manrope.className}`}
+      className={`bg-white dark:bg-gray-950 text-black dark:text-white ${openSans.className}`}
     >
       <body className="min-h-[100dvh] bg-gray-50">
         <SWRConfig

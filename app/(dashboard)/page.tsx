@@ -1,8 +1,7 @@
-import { Button } from "@/components/ui/button";
+import { Button} from "@/components/ui/button";
 import { ArrowRight, CreditCard, Database } from "lucide-react";
-import { Terminal } from "./terminal";
-import Link from "next/link";
 import { getPublicListings } from "@/lib/db/queries";
+import CardProduct from "@/components/ui/card-product";
 
 export default async function HomePage() {
   const listings = await getPublicListings();
@@ -10,17 +9,18 @@ export default async function HomePage() {
   return (
     <main>
       <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="lg:grid lg:grid-cols-12 lg:gap-8">
-            <div className="sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left">
-              <h1 className="text-4xl font-bold text-gray-900 tracking-tight sm:text-5xl md:text-6xl">
-                Compra y vende
-                <span className="block text-orange-500">en solo minutos</span>
+        <div
+          className="max-w-7xl mx-auto h-dvh bg-[url('/images/hero-image.png')] 
+          bg-cover bg-center flex items-end rounded-3xl"
+        >
+          <div className="lg:grid lg:grid-cols-12 lg:gap-8 ">
+            <div className="rounded-bl-3xl rounded-tr-3xl bg-chart-6/70 sm:text-center md:max-w-4xl md:mx-auto lg:col-span-7 lg:text-left p-8">
+              <h1 className="text-6xl font-bold text-white tracking-tight sm:text-5xl md:text-6xl">
+                Find aircraft parts and aviation equipment you can trust
               </h1>
-              <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-                Launch your SaaS product in record time with our powerful,
-                ready-to-use template. Packed with modern technologies and
-                essential integrations.
+              <p className="mt-3 text-base text-white sm:mt-5 sm:text-xl lg:text-lg xl:text-xl font-semibold">
+                Thousands of helicopter and aircraft parts listed by verified
+                sellers.
               </p>
               <div className="mt-8 sm:max-w-lg sm:mx-auto sm:text-center lg:text-left lg:mx-0">
                 <a
@@ -29,45 +29,29 @@ export default async function HomePage() {
                 >
                   <Button
                     size="lg"
-                    variant="outline"
-                    className="text-lg rounded-full"
+                    variant="default"
+                    className=" rounded-full text-base font-bold"
                   >
-                    Comienza a vender
+                    Start to sell
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
+                  <span className="text-white mx-4 font-semibold">
+                    Free to browse. Only pay when you sell.
+                  </span>
                 </a>
               </div>
-            </div>
-            <div className="mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:flex lg:items-center">
-              <Terminal />
             </div>
           </div>
         </div>
       </section>
 
       <section className="py-6">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-2xl font-bold mb-6">Productos en venta</h1>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="max-w-7xl mx-auto">
+          <h1 className="text-2xl font-bold mb-6">New Listing</h1>
+          <p>Fresh parts, updated daily.</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-7">
             {listings.map((item) => (
-              <Link
-                href={`/listing/${item.id}`}
-                key={item.id}
-                className="border p-4 rounded shadow hover:bg-gray-50"
-              >
-                <h2 className="text-xl font-semibold">{item.title}</h2>
-                <p className="text-gray-600">€{item.price}</p>
-                {item.imageUrl && (
-                  <img
-                    src={item.imageUrl}
-                    alt={item.title}
-                    className="mt-2 w-full h-40 object-cover rounded"
-                  />
-                )}
-                <p className="text-sm text-gray-400 mt-1">
-                  Publicado por {item.sellerName || "usuario"}
-                </p>
-              </Link>
+              <CardProduct key={item.id} {...item} />
             ))}
           </div>
         </div>

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState, Suspense } from "react";
 import { Button } from "@/components/ui/button";
-import { CircleIcon, Home, LogOut } from "lucide-react";
+import { CircleIcon, Home, LogOut, CirclePlus } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,9 +21,8 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 function UserMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { data: user } = useSWR<User>("/api/user", fetcher);
-  // console.log("🧪 user:", user);
-
   const router = useRouter();
+
   async function handleSignOut() {
     await signOut();
     mutate("/api/user"); // 🔁 fuerza la recarga del dato user
@@ -31,76 +30,90 @@ function UserMenu() {
     router.push("/"); // 🚀 redirige al home
   }
 
-  if (!user) {
-    return (
-      <>
-        <Link
-          href="/pricing"
-          className="text-sm font-medium text-gray-700 hover:text-gray-900"
-        >
-          Pricing
-        </Link>
-        <Button asChild className="rounded-full">
-          <Link href="/sign-up">Sign Up</Link>
-        </Button>
-      </>
-    );
-  }
+  // Ruta dinámica para publicar
+  const publishHref = user ? "/listings/new" : "/sign-up";
 
   return (
     <>
-     {["active", "trialing"].includes(user.subscriptionStatus || "") && (
-        <Button
-          asChild
-          className="rounded-full bg-orange-500 hover:bg-orange-600 text-white"
-        >
-          <Link href="/listing/new">Publicar articulo</Link>
+      <Button
+        asChild
+        variant={user ? "default" : "outline"}
+        className={!user ? "border-primary text-black" : ""}
+      >
+        <Link href={publishHref}>
+          <CirclePlus className="w-5 h-5" />
+          Publicar artículo
+        </Link>
+      </Button>
+
+      {/* Si no hay usuario, mostramos Sign Up; si hay, el avatar con dropdown */}
+      {!user ? (
+        <Button asChild className="rounded-full">
+          <Link href="/sign-up">Sign Up</Link>
         </Button>
+      ) : (
+        <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+          <DropdownMenuTrigger>
+            <Avatar className="cursor-pointer size-9">
+              <AvatarImage alt={user.name || ""} />
+              <AvatarFallback>
+                {user.email
+                  .split(" ")
+                  .map((n) => n[0])
+                  .join("")}
+              </AvatarFallback>
+            </Avatar>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="flex flex-col gap-1">
+            <DropdownMenuItem className="cursor-pointer">
+              <Link href="/dashboard" className="flex w-full items-center">
+                <Home className="mr-2 h-4 w-4" />
+                <span>Dashboard</span>
+              </Link>
+            </DropdownMenuItem>
+
+            <DropdownMenuItem
+              className="w-full flex-1 cursor-pointer"
+              onClick={handleSignOut}
+            >
+              <LogOut className="mr-2 h-4 w-4" />
+              <span>Sign out</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       )}
-
-      <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-        <DropdownMenuTrigger>
-          <Avatar className="cursor-pointer size-9">
-            <AvatarImage alt={user.name || ""} />
-            <AvatarFallback>
-              {user.email
-                .split(" ")
-                .map((n) => n[0])
-                .join("")}
-            </AvatarFallback>
-          </Avatar>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="flex flex-col gap-1">
-          <DropdownMenuItem className="cursor-pointer">
-            <Link href="/dashboard" className="flex w-full items-center">
-              <Home className="mr-2 h-4 w-4" />
-              <span>Dashboard</span>
-            </Link>
-          </DropdownMenuItem>
-
-          <DropdownMenuItem
-            className="w-full flex-1 cursor-pointer"
-            onClick={handleSignOut}
-          >
-            <LogOut className="mr-2 h-4 w-4" />
-            <span>Sign out</span>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
     </>
-  ); // ✅ el cierre correcto
+  ); 
 }
 
 function Header() {
   return (
     <header className="border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-        <Link href="/" className="flex items-center">
-          <CircleIcon className="h-6 w-6 text-orange-500" />
-          <span className="ml-2 text-xl font-semibold text-gray-900">
-            AIRhub market
-          </span>
-        </Link>
+        <div className="flex items-center space-x-4">
+          <Link href="/" className="flex items-center">
+            <CircleIcon className="h-6 w-6 text-primary" />
+            <span className="ml-2 text-xl font-semibold text-gray-900">
+              AIRhub market
+            </span>
+          </Link>
+          <Link className="text-base font-semibold mx-8" href="/">
+            Listing
+          </Link>
+          <Link className="text-base font-semibold mr-8" href="/">
+            Technical Library
+          </Link>
+          <Link className="text-base font-semibold mr-8" href="/">
+            Blog
+          </Link>
+          <Link className="text-base font-semibold mr-8" href="/pricing">
+            Pricing
+          </Link>
+          <Link className="text-base font-semibold mr-8" href="/">
+            Contact
+          </Link>
+        </div>
+
         <div className="flex items-center space-x-4">
           <Suspense fallback={<div className="h-9" />}>
             <UserMenu />
